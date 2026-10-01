@@ -10,9 +10,17 @@
  <svg class="topdrip" viewBox="0 0 1440 170" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0 0h1440v60c-30 0-40 30-60 30s-25-50-60-50-30 90-60 90-25-70-60-70-35 40-70 40-30-20-60-20-40 100-70 100-30-80-60-80-40 30-70 30-35-55-70-55-25 75-60 75-35-45-70-45-40 25-80 25-30-60-60-60-35 110-70 110-30-90-60-90-40 40-70 40-30-30-60-30-40 70-70 70-30-50-60-50-30 20-60 20-30-40-60-40V0z"/></svg>
  <div class="wrap in">
   <div><h1>Croque<br>la <span>vie !</span></h1>
-   <p class="lead">Barres à 10 DA, praliné, tablettes, biscuits Tutku… Touche le Tutku pour le croquer 😋</p>
+   <p class="lead">Barres à 10 DA, praliné, tablettes, biscuits Tutku… Ouvre le paquet Tutku et croque le biscuit 😋</p>
    <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn r" href="#envie">Quelle est ton envie ?</a><a class="btn c" href="#budget">Ton budget 10 DA</a></div></div>
-  <div class="biteZone"><div class="pk" id="pk" role="button" tabindex="0" aria-label="Croquer le biscuit Tutku"><span class="tap tr"><i></i>Croque !</span><img id="pkimg" src="img/eti40.webp" alt="Tutku biscuit"><canvas id="crumbs"></canvas></div><span class="count">Bouchées : <b id="cnt">0</b></span></div>
+  <div class="biteZone"><div class="stage2" id="stg2">
+  <div class="cookie" id="cookie" role="button" tabindex="0" aria-label="Croquer le biscuit Tutku">
+   <svg viewBox="-160 -160 320 320" aria-hidden="true"><defs><radialGradient id="sh" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#3a1d10" stop-opacity=".35"/></radialGradient><radialGradient id="cr" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#7a3d1c"/><stop offset="1" stop-color="#3a1a0b"/></radialGradient></defs>
+    <circle r="96" fill="url(#cr)"/>
+    <g id="top"><g id="wedges"></g><circle r="150" fill="url(#sh)"/><circle r="150" fill="none" stroke="#b07a42" stroke-width="4" opacity=".6"/></g>
+   </svg></div>
+  <div class="wrap2" id="wrapP" role="button" tabindex="0" aria-label="Ouvrir le paquet Tutku"><img class="h1" src="img/eti40.webp" alt=""><img class="h2" src="img/eti40.webp" alt="Paquet Tutku"><span class="tap tr"><i></i>Ouvre-moi !</span></div>
+  <canvas id="crumbs"></canvas></div>
+  <span class="count" id="cntw">Ouvre le paquet, puis croque 😋</span></div></div>
  </div>
 </section>
 
@@ -52,17 +60,27 @@
 <div id="ftr"></div>
 <script src="data.js"></script><script src="core.js"></script>
 <script>
-// bite
-const pk=document.getElementById('pk'),pi=document.getElementById('pkimg'),cv=document.getElementById('crumbs'),cx=cv.getContext('2d');let bites=[],cnt=0,parts=[];
+// unwrap + bite
+const W=document.getElementById('wedges');let w='';for(let i=0;i<12;i++){const a0=i*Math.PI/6,a1=(i+1)*Math.PI/6,r=150;w+='<path d="M0 0 L'+(r*Math.cos(a0)).toFixed(1)+' '+(r*Math.sin(a0)).toFixed(1)+' A'+r+' '+r+' 0 0 1 '+(r*Math.cos(a1)).toFixed(1)+' '+(r*Math.sin(a1)).toFixed(1)+'Z" fill="'+(i%2?'#6b3a1e':'#ecc98f')+'"/>'}W.innerHTML=w;
+const stg=document.getElementById('stg2'),wp=document.getElementById('wrapP'),ck=document.getElementById('cookie'),topG=document.getElementById('top'),cv=document.getElementById('crumbs'),cx=cv.getContext('2d'),cw=document.getElementById('cntw');
+let bites=[],cnt=0,parts=[],opened=false;
 function sizeC(){const r=cv.getBoundingClientRect();cv.width=r.width;cv.height=r.height}sizeC();addEventListener('resize',sizeC);
-function applyMask(){if(!bites.length){pi.style.webkitMaskImage=pi.style.maskImage='';return}const g=bites.map(b=>'radial-gradient(circle at '+b[0]+'% '+b[1]+'%, transparent '+b[2]+'%, #000 calc('+b[2]+'% + 1px))').join(',');pi.style.webkitMaskImage=pi.style.maskImage=g;pi.style.webkitMaskComposite='source-in';pi.style.maskComposite='intersect'}
-function bite(e){const r=pi.getBoundingClientRect();let x=e&&e.clientX?((e.clientX-r.left)/r.width*100):(30+Math.random()*40),y=e&&e.clientY?((e.clientY-r.top)/r.height*100):(40+Math.random()*20);
- const s=9+Math.random()*4;[[0,0],[s*.9,-s*.5],[-s*.9,-s*.4],[s*.2,s*.8]].forEach(([dx,dy])=>bites.push([x+dx*.6,y+dy*.6,s]));applyMask();
- cnt++;document.getElementById('cnt').textContent=cnt;
- const cr=cv.getBoundingClientRect();for(let i=0;i<26;i++)parts.push({x:r.left-cr.left+x/100*r.width,y:r.top-cr.top+y/100*r.height,vx:(Math.random()-.5)*7,vy:-Math.random()*6-1,r:2+Math.random()*4,c:['#6b3a1e','#d9a066','#3a1d10','#f2d3a0'][i%4],l:60});
- if(navigator.vibrate)navigator.vibrate(15);
- if(bites.length>=16){setTimeout(()=>{bites=[];applyMask();const nx=['img/eti40.webp','img/maxi.webp','img/eti40.webp'];pi.src=nx[cnt%3];pk.classList.remove('pop');void pk.offsetWidth;pk.classList.add('pop')},450)}}
-pk.addEventListener('click',bite);pk.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();bite()}});
+function crumbs(x,y,n){const cr=cv.getBoundingClientRect();for(let i=0;i<n;i++)parts.push({x:x-cr.left,y:y-cr.top,vx:(Math.random()-.5)*8,vy:-Math.random()*6-1,r:2+Math.random()*4,c:['#6b3a1e','#ecc98f','#3a1d10','#d9a066'][i%4],l:70})}
+function open(){if(opened)return;opened=true;stg.classList.add('open');const r=wp.getBoundingClientRect();crumbs(r.left+r.width/2,r.top+r.height/2,14);cw.innerHTML='Touche le biscuit pour le croquer · Bouchées : <b id="cnt">0</b>';if(navigator.vibrate)navigator.vibrate(20)}
+function bite(e){if(!opened)return;const svg=ck.querySelector('svg'),r=svg.getBoundingClientRect();let px=e&&e.clientX?e.clientX:r.left+r.width*(.25+Math.random()*.5),py=e&&e.clientY?e.clientY:r.top+r.height*(.25+Math.random()*.5);
+ // snap bite toward the edge so it looks like a real bite
+ let nx=(px-r.left)/r.width*320-160,ny=(py-r.top)/r.height*320-160;const d=Math.hypot(nx,ny)||1;if(bites.length<2||Math.random()<.6){const k=Math.max(d,120)/d;nx*=k;ny*=k}
+ const s=46+Math.random()*12;[[0,0],[s*.75,-s*.35],[-s*.75,-s*.3]].forEach(([dx,dy])=>{const ang=Math.atan2(ny,nx);const rx=dx*Math.cos(ang+Math.PI/2)-dy*Math.sin(ang+Math.PI/2),ry=dx*Math.sin(ang+Math.PI/2)+dy*Math.cos(ang+Math.PI/2);bites.push([nx+rx*.6,ny+ry*.6,s])});
+ let mk=document.getElementById('bm');if(!mk){mk=document.createElementNS('http://www.w3.org/2000/svg','mask');mk.id='bm';mk.innerHTML='<rect x="-160" y="-160" width="320" height="320" fill="#fff"/>';svg.querySelector('defs').appendChild(mk);topG.setAttribute('mask','url(#bm)');svg.querySelector('circle').setAttribute('mask','url(#bm2)')}
+ bites.slice(-3).forEach(b=>{const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',b[0]);c.setAttribute('cy',b[1]);c.setAttribute('r',b[2]);c.setAttribute('fill','#000');mk.appendChild(c)});
+ let mk2=document.getElementById('bm2');if(!mk2){mk2=document.createElementNS('http://www.w3.org/2000/svg','mask');mk2.id='bm2';mk2.innerHTML='<rect x="-160" y="-160" width="320" height="320" fill="#fff"/>';svg.querySelector('defs').appendChild(mk2)}
+ bites.slice(-3).forEach(b=>{const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',b[0]*1.08);c.setAttribute('cy',b[1]*1.08);c.setAttribute('r',b[2]*.82);c.setAttribute('fill','#000');mk2.appendChild(c)});
+ cnt++;const ce=document.getElementById('cnt');if(ce)ce.textContent=cnt;crumbs(px,py,26);if(navigator.vibrate)navigator.vibrate(12);
+ ck.classList.remove('chomp');void ck.offsetWidth;ck.classList.add('chomp');
+ if(bites.length>=18){setTimeout(()=>{ck.classList.add('gone');cw.innerHTML='Miam ! <a href="#envie" style="text-decoration:underline">Un autre ?</a> 🍪';setTimeout(reset,1600)},300)}}
+function reset(){bites=[];['bm','bm2'].forEach(i=>document.getElementById(i)?.remove());topG.removeAttribute('mask');ck.querySelector('svg circle').removeAttribute('mask');ck.classList.remove('gone');stg.classList.remove('open');opened=false;cw.textContent='Ouvre le paquet, puis croque 😋'}
+wp.addEventListener('click',open);wp.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
+ck.addEventListener('click',bite);ck.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();bite()}});
 (function loop(){cx.clearRect(0,0,cv.width,cv.height);parts=parts.filter(p=>p.l>0);parts.forEach(p=>{p.vy+=.3;p.x+=p.vx;p.y+=p.vy;p.l--;cx.globalAlpha=Math.min(1,p.l/30);cx.fillStyle=p.c;cx.beginPath();cx.arc(p.x,p.y,p.r,0,7);cx.fill()});requestAnimationFrame(loop)})();
 // moods
 const mo=document.getElementById('moods');mo.innerHTML=MOODS.map(m=>'<button type="button" data-m="'+m[0]+'">'+m[2]+' '+m[1]+'</button>').join('');
