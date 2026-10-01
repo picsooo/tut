@@ -1,0 +1,80 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#2a160d">
+<link rel="stylesheet" href="style.css"><link rel="icon" href="img/logo-liner.png">
+<title>Liner — Croque la vie !</title>
+<meta name="description" content="Liner version gourmande : croque les barres à l'écran, trouve ton produit selon ton envie.">
+</head><body data-v="fun">
+<div id="hdr"></div>
+<main>
+<section class="f-hero">
+ <svg class="topdrip" viewBox="0 0 1440 170" preserveAspectRatio="none" aria-hidden="true"><path fill="currentColor" d="M0 0h1440v60c-30 0-40 30-60 30s-25-50-60-50-30 90-60 90-25-70-60-70-35 40-70 40-30-20-60-20-40 100-70 100-30-80-60-80-40 30-70 30-35-55-70-55-25 75-60 75-35-45-70-45-40 25-80 25-30-60-60-60-35 110-70 110-30-90-60-90-40 40-70 40-30-30-60-30-40 70-70 70-30-50-60-50-30 20-60 20-30-40-60-40V0z"/></svg>
+ <div class="wrap in">
+  <div><h1>Croque<br>la <span>vie !</span></h1>
+   <p class="lead">Barres à 10 DA, praliné, tablettes, biscuits Tutku… Touche le Tutku pour le croquer 😋</p>
+   <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn r" href="#envie">Quelle est ton envie ?</a><a class="btn c" href="#budget">Ton budget 10 DA</a></div></div>
+  <div class="biteZone"><div class="pk" id="pk" role="button" tabindex="0" aria-label="Croquer le biscuit Tutku"><span class="tap tr"><i></i>Croque !</span><img id="pkimg" src="img/eti40.webp" alt="Tutku biscuit"><canvas id="crumbs"></canvas></div><span class="count">Bouchées : <b id="cnt">0</b></span></div>
+ </div>
+</section>
+
+<section id="envie"><div class="wrap">
+ <div class="shead"><h2>Quelle est<br>ton envie ?</h2><p>Choisis une humeur, on te dit quoi croquer.</p></div>
+ <div class="moods" id="moods"></div><div class="mres" id="mres"></div>
+</div></section>
+
+<section id="budget" style="padding-top:0"><div class="wrap"><div class="budget">
+ <div><h2>Avec <span id="da">100</span> DA,<br>tu t'offres…</h2><p style="opacity:.8;margin:12px 0 18px">Fais glisser : toutes nos barres sont à 10 DA.</p><input type="range" id="rg" min="10" max="300" step="10" value="100" aria-label="Budget en dinars"></div>
+ <div><div class="big"><span id="nb">10</span> <small style="font-size:.35em;color:#fff">barres</small></div><div class="bars" id="bars"></div></div>
+</div></div></section>
+
+<section style="background:#fff"><div class="wrap prz">
+ <div class="bag"><img id="bag" src="img/pr-lait.webp" alt="Sachet Praliné"></div>
+ <div><span class="kick">Praliné</span><h2 style="margin-top:8px">Six saveurs<br>à partager.</h2><p style="color:var(--mut);font-size:17px;margin-top:10px">Pour les invités, les fêtes et les pauses café. Choisis ta saveur :</p><div class="flav" id="flav"></div></div>
+</div></section>
+
+<section style="padding-bottom:20px"><div class="wrap"><div class="shead"><h2>MariClass</h2><p>Chocolat au lait fourré. Fais défiler les tablettes.</p></div></div>
+ <div class="mcs" id="mcs"></div>
+</section>
+<section class="contact" id="contact"><div class="wrap cg">
+ <div><span class="kick" style="color:#ffb15c">Contact</span><h2 style="margin-top:10px">Parlons<br>gourmandise.</h2>
+  <div class="ci">
+   <a href="tel:+21323748569"><span>📞</span><div><b>+213 23 74 85 69</b><br><small style="opacity:.7">Standard</small></div></a>
+   <a href="mailto:linerimport@yahoo.fr"><span>✉️</span><div><b>linerimport@yahoo.fr</b></div></a>
+   <div><span>🏭</span><div><b>Unité de production</b><br><small style="opacity:.75">Zone industrielle, lot n°05, Oued Smar, Alger</small></div></div>
+   <div><span>🏢</span><div><b>Siège social</b><br><small style="opacity:.75">Cité Mouaissia n°2, lot 131, Hammadi, Boumerdès</small></div></div>
+  </div></div>
+ <form class="f" id="cform">
+  <label>Nom<input required autocomplete="name"></label><label>Téléphone<input type="tel" required autocomplete="tel"></label>
+  <label>Wilaya<select id="cw"></select></label><label>Vous êtes<select><option>Particulier</option><option>Épicerie / supérette</option><option>Grossiste / distributeur</option><option>Grande surface</option></select></label>
+  <label class="full">Message<textarea placeholder="Votre demande…"></textarea></label>
+  <button class="btn c" type="submit">Envoyer</button>
+ </form></div></section>
+</main>
+<div id="ftr"></div>
+<script src="data.js"></script><script src="core.js"></script>
+<script>
+// bite
+const pk=document.getElementById('pk'),pi=document.getElementById('pkimg'),cv=document.getElementById('crumbs'),cx=cv.getContext('2d');let bites=[],cnt=0,parts=[];
+function sizeC(){const r=cv.getBoundingClientRect();cv.width=r.width;cv.height=r.height}sizeC();addEventListener('resize',sizeC);
+function applyMask(){if(!bites.length){pi.style.webkitMaskImage=pi.style.maskImage='';return}const g=bites.map(b=>'radial-gradient(circle at '+b[0]+'% '+b[1]+'%, transparent '+b[2]+'%, #000 calc('+b[2]+'% + 1px))').join(',');pi.style.webkitMaskImage=pi.style.maskImage=g;pi.style.webkitMaskComposite='source-in';pi.style.maskComposite='intersect'}
+function bite(e){const r=pi.getBoundingClientRect();let x=e&&e.clientX?((e.clientX-r.left)/r.width*100):(30+Math.random()*40),y=e&&e.clientY?((e.clientY-r.top)/r.height*100):(40+Math.random()*20);
+ const s=9+Math.random()*4;[[0,0],[s*.9,-s*.5],[-s*.9,-s*.4],[s*.2,s*.8]].forEach(([dx,dy])=>bites.push([x+dx*.6,y+dy*.6,s]));applyMask();
+ cnt++;document.getElementById('cnt').textContent=cnt;
+ const cr=cv.getBoundingClientRect();for(let i=0;i<26;i++)parts.push({x:r.left-cr.left+x/100*r.width,y:r.top-cr.top+y/100*r.height,vx:(Math.random()-.5)*7,vy:-Math.random()*6-1,r:2+Math.random()*4,c:['#6b3a1e','#d9a066','#3a1d10','#f2d3a0'][i%4],l:60});
+ if(navigator.vibrate)navigator.vibrate(15);
+ if(bites.length>=16){setTimeout(()=>{bites=[];applyMask();const nx=['img/eti40.webp','img/maxi.webp','img/eti40.webp'];pi.src=nx[cnt%3];pk.classList.remove('pop');void pk.offsetWidth;pk.classList.add('pop')},450)}}
+pk.addEventListener('click',bite);pk.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();bite()}});
+(function loop(){cx.clearRect(0,0,cv.width,cv.height);parts=parts.filter(p=>p.l>0);parts.forEach(p=>{p.vy+=.3;p.x+=p.vx;p.y+=p.vy;p.l--;cx.globalAlpha=Math.min(1,p.l/30);cx.fillStyle=p.c;cx.beginPath();cx.arc(p.x,p.y,p.r,0,7);cx.fill()});requestAnimationFrame(loop)})();
+// moods
+const mo=document.getElementById('moods');mo.innerHTML=MOODS.map(m=>'<button type="button" data-m="'+m[0]+'">'+m[2]+' '+m[1]+'</button>').join('');
+function showMood(m){mo.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));document.getElementById('mres').innerHTML=ORDER.filter(k=>P[k].mood.includes(m)).slice(0,4).map(k=>'<a href="produit.html?p='+k+'" style="--c:'+P[k].c+'"><div class="im">'+pimg(k)+'</div><b>'+P[k].name+'</b></a>').join('')}
+mo.onclick=e=>{const b=e.target.closest('button');if(b)showMood(b.dataset.m)};showMood('fondant');
+// budget
+const rg=document.getElementById('rg');function bud(){const v=+rg.value,n=v/10;document.getElementById('da').textContent=v;document.getElementById('nb').textContent=n;document.getElementById('bars').innerHTML='<i></i>'.repeat(n)}rg.oninput=bud;bud();
+// praline
+const PF=[['Noisette','#6b3a8a'],['Lait','#1f6fbf'],['Crémeux','#9a8a70'],['Amande','#8f949a'],['Noisette noire','#2e7d3a'],['Chocolat noir','#a8822f']];
+const fl=document.getElementById('flav');fl.innerHTML=PF.map((f,i)=>'<button type="button" data-i="'+i+'" style="background:'+f[1]+'">'+f[0]+'</button>').join('');
+fl.onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i,bg=document.getElementById('bag');fl.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));bg.classList.add('spin');setTimeout(()=>{bg.src=P.praline.imgs[i];bg.classList.remove('spin')},300)};
+document.getElementById('mcs').innerHTML=P.mariclass.imgs.map((s,i)=>'<a href="produit.html?p=mariclass"><img src="'+s+'" alt="MariClass '+P.mariclass.var[i]+'" loading="lazy"><b>'+P.mariclass.var[i]+'</b></a>').join('');
+contactInit();reveal();
+</script>
+</body></html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#2a160d">
+<link rel="stylesheet" href="style.css"><link rel="icon" href="img/logo-liner.png">
+<title>Distributeurs — Liner</title></head><body data-v="auto">
+<div id="hdr"></div><main>
+<section class="p-hero" style="--c:#d0121b"><div class="wrap in"><div><nav class="crumb"><a id="hm" href="index.html">Accueil</a><span>/</span><span>Distributeurs</span></nav>
+ <h1>Grossistes et<br>distributeurs</h1><p class="lead">Épiceries, supérettes, grossistes et grandes surfaces : préparez votre commande et rejoignez le réseau Liner dans votre wilaya.</p></div>
+ <div class="stage"><img class="cut" src="img/duobox.webp" alt="" style="max-height:80%;margin-right:-10%"><img class="cut" src="img/panbox.webp" alt="" style="max-height:72%"></div></div></section>
+<section><div class="wrap"><div class="perks">
+ <div class="perk rv"><div class="e">🍫</div><h3>Rotation rapide</h3><p>Des barres à 10 DA qui partent vite, en présentoirs de 24 pièces.</p></div>
+ <div class="perk rv"><div class="e">🏭</div><h3>Fabriqué à Alger</h3><p>Unité de production à Oued Smar, approvisionnement régulier.</p></div>
+ <div class="perk rv"><div class="e">📣</div><h3>Marques visibles</h3><p>Des campagnes régulières sur les réseaux qui envoient les clients en magasin.</p></div>
+ <div class="perk rv"><div class="e">🤝</div><h3>Un interlocuteur</h3><p>Un commercial dédié pour vos commandes et vos conditions.</p></div>
+</div></div></section>
+<section style="padding-top:0"><div class="wrap pgrid">
+ <div class="panel"><h2>Préparer ma commande</h2><p class="note" style="margin:0 0 12px">Indiquez le nombre de cartons ou présentoirs souhaités.</p><div class="sim" id="sim"></div><div class="tot"><span>Total</span><span id="tot">0 colis</span></div></div>
+ <form class="f" id="rf" style="border:1px solid var(--line)"><h2 class="full" style="font-size:32px">Envoyer ma demande</h2>
+  <label>Nom / Commerce<input required></label><label>Téléphone<input type="tel" required></label>
+  <label>Wilaya<select id="w2"></select></label><label>Activité<select><option>Épicerie / supérette</option><option>Grossiste</option><option>Grande surface</option><option>Distributeur régional</option></select></label>
+  <label class="full">Récapitulatif<textarea id="rec" readonly></textarea></label><button class="btn c" type="submit">Envoyer la demande</button></form>
+</div></section>
+</main><div id="ftr"></div>
+<script src="data.js"></script><script src="core.js"></script>
+<script>
+document.getElementById('hm').href=HOME;document.getElementById('w2').innerHTML=WILAYAS.map((w,i)=>'<option>'+String(i+1).padStart(2,'0')+' · '+w+'</option>').join('');
+const items=ORDER.map(k=>[k,P[k].name+' — '+(P[k].cat==='barres'?'présentoir 24':'carton')]);
+document.getElementById('sim').innerHTML=items.map(([k,l])=>'<div class="row"><span>'+l+'</span><input type="number" min="0" value="0" data-k="'+k+'" aria-label="'+l+'"></div>').join('');
+document.getElementById('sim').oninput=()=>{let t=0,r=[];document.querySelectorAll('#sim input').forEach(i=>{const v=+i.value||0;t+=v;if(v)r.push(v+' × '+P[i.dataset.k].name)});document.getElementById('tot').textContent=t+' colis';document.getElementById('rec').value=r.join('\n')};
+document.getElementById('rf').onsubmit=e=>{e.preventDefault();okForm(e.target,'Demande envoyée !')};reveal();
+</script></body></html>
