@@ -30,4 +30,4 @@ document.getElementById('pk').innerHTML=p.pts.map(t=>'<li>'+t+'</li>').join('');
 const cp=document.getElementById('cp');cp.src=p.camp;cp.alt='Publication '+p.name;
 document.getElementById('rel').innerHTML=ORDER.filter(x=>x!==k).sort((a,b)=>(P[b].cat===p.cat)-(P[a].cat===p.cat)).slice(0,3).map(x=>{const r=P[x];return '<a class="pc" href="produit.html?p='+x+'" style="--c:'+r.c+'"><div class="vis">'+pimg(x)+'</div><div class="tx"><small>'+CAT[r.cat][0]+'</small><h3>'+r.name+'</h3><span class="go">Voir →</span></div></a>'}).join('');
 reveal();
-</script><script src="https://radar-xi-flax.vercel.app/t.js" defer></script></body></html>
+</script></body></html>

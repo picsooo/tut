@@ -27,4 +27,4 @@ const items=ORDER.map(k=>[k,P[k].name+' — '+(P[k].cat==='barres'?'présentoir 
 document.getElementById('sim').innerHTML=items.map(([k,l])=>'<div class="row"><span>'+l+'</span><input type="number" min="0" value="0" data-k="'+k+'" aria-label="'+l+'"></div>').join('');
 document.getElementById('sim').oninput=()=>{let t=0,r=[];document.querySelectorAll('#sim input').forEach(i=>{const v=+i.value||0;t+=v;if(v)r.push(v+' × '+P[i.dataset.k].name)});document.getElementById('tot').textContent=t+' colis';document.getElementById('rec').value=r.join('\n')};
 document.getElementById('rf').onsubmit=e=>{e.preventDefault();okForm(e.target,'Demande envoyée !')};reveal();
-</script><script src="https://radar-xi-flax.vercel.app/t.js" defer></script></body></html>
+</script></body></html>
